@@ -17,19 +17,36 @@ Responsible: Shangwei Liu, Alex Miller
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from 'next/image';
 import YouWin from "./components/YouWin";
 import YouLose from "./components/YouLose";
 import YouTie from "./components/YouTie"; 
 import Hand from "./components/Hand";
-import {
-  GameContainer,
-  HandsContainer,
-  GameTitle,
-  GameDescription,
-  ExplanationButton,
-  ExplanationText,
-  TurnCounter, 
-} from "./components/styledComponents";
+import {GameContainer, HandsContainer, GameTitle, GameDescription, ExplanationButton, ExplanationText} from "./components/styledComponents";
+import React from 'react';
+
+const CursorPreload = () => (
+  <div style={{ display: 'none' }}>
+    {[1, 2, 3, 4].map((fingers) => (
+      <React.Fragment key={fingers}>
+        <Image
+          src={`/hands/left-up-${fingers}.png`}
+          alt=""
+          width={50}
+          height={50}
+          priority
+        />
+        <Image
+          src={`/hands/right-up-${fingers}.png`}
+          alt=""
+          width={50}
+          height={50}
+          priority
+        />
+      </React.Fragment>
+    ))}
+  </div>
+);
 
 export default function GamePage() {
   const [gameState, setGameState] = useState<"playing" | "win" | "lose" | "tie">(
@@ -86,12 +103,14 @@ export default function GamePage() {
 
   const makeOpponentMove = () => {
     const validAttackingHands = Object.entries(opponentFingers)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
     const attackingHand =
       validAttackingHands[Math.floor(Math.random() * validAttackingHands.length)];
 
     const validTargetHands = Object.entries(yourFingers)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
     const targetHand =
@@ -108,6 +127,7 @@ export default function GamePage() {
       const timer = setTimeout(makeOpponentMove, 2000);
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYourTurn, gameState]);
 
   useEffect(() => {
@@ -135,7 +155,7 @@ export default function GamePage() {
   }, [isYourTurn, yourFingers, currentHand, gameState]);
 
   return (
-    <GameContainer $currentHand={currentHand} $yourFingers={yourFingers}>
+    <GameContainer>
       {gameState === "playing" && (
         <>
           <GameTitle>Chopsticks Game</GameTitle>
@@ -153,7 +173,10 @@ export default function GamePage() {
               Chopsticks is a simple game where players use their hands to attack their opponent&apos;s hands. Click on your hands to switch which hand you attack with and click opponent&apos;s hands to attack them. The first to get both opponent&apos;s hands to exactly 5 fingers wins! If no player wins within 30 moves, the game ends in a tie.
             </ExplanationText>
           )}
-          <HandsContainer>
+          <HandsContainer
+            $currentHand={currentHand}
+            $yourFingers={yourFingers}
+          >
             <div>
               <Hand
                 player="opponent"

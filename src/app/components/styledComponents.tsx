@@ -15,7 +15,7 @@ export const HandButtonStyled = styled.button`
   height: 10vh;
   margin: 2vw;
   background-color: transparent;
-  cursor: inherit;
+  /* cursor: inherit; */
   border: none;
   padding: 0;
   position: relative;
@@ -26,10 +26,10 @@ export const HandImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  /* cursor: inherit; */
 `;
 
-// Game Container
-export const GameContainer = styled.div<CursorContainerProps>`
+export const GameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,10 +37,6 @@ export const GameContainer = styled.div<CursorContainerProps>`
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  cursor: ${props => {
-    const fingers = props.$yourFingers[props.$currentHand as 'left' | 'right'];
-    return `url('/hands/${props.$currentHand}-up-${fingers}.png') 50 50, auto`;
-  }};
 `;
 
 interface CursorContainerProps {
@@ -48,14 +44,16 @@ interface CursorContainerProps {
   $yourFingers: { left: number; right: number };
 }
 
-// Hands Container
-export const HandsContainer = styled.div`
+export const HandsContainer = styled.div<CursorContainerProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  gap: 2vh;
+  cursor: ${props => {
+    const fingers = props.$yourFingers[props.$currentHand as 'left' | 'right'];
+    return `url('/hands/${props.$currentHand}-up-${fingers}.png') 50 50, auto`;
+  }};
 `;
 
 // Popup (Win/Lose/Tie Screen)
