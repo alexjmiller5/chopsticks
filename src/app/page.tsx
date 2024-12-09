@@ -18,7 +18,7 @@ Responsible: Shangwei Liu, Alex Miller
 import { useState, useEffect } from "react";
 import YouWin from "./components/YouWin";
 import YouLose from "./components/YouLose";
-import YouTie from "./components/YouTie"; // New component for tie screen
+import YouTie from "./components/YouTie"; 
 import Hand from "./components/Hand";
 import {
   GameContainer,
@@ -27,7 +27,7 @@ import {
   GameDescription,
   ExplanationButton,
   ExplanationText,
-  TurnCounter, // New styled component for turn display
+  TurnCounter, 
 } from "./components/styledComponents";
 
 export default function GamePage() {
@@ -37,8 +37,8 @@ export default function GamePage() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [currentHand, setCurrentHand] = useState<"left" | "right">("left");
   const [isYourTurn, setIsYourTurn] = useState(true);
-  const [turnCount, setTurnCount] = useState(0); // Track number of turns
-  const TURN_LIMIT = 30; // Define maximum number of turns for a tie
+  const [turnCount, setTurnCount] = useState(0);
+  const TURN_LIMIT = 30; 
 
   const [opponentFingers, setOpponentFingers] = useState({
     left: 1,
@@ -55,7 +55,7 @@ export default function GamePage() {
     setCurrentHand("left");
     setOpponentFingers({ left: 1, right: 1 });
     setYourFingers({ left: 1, right: 1 });
-    setTurnCount(0); // Reset turn count
+    setTurnCount(0); 
   };
 
   function toggleExplanation() {
@@ -80,7 +80,7 @@ export default function GamePage() {
     const attackingFingers = yourFingers[currentHand];
     updateFingers("opponent", targetHand, attackingFingers);
     setIsYourTurn(false);
-    setTurnCount((prev) => prev + 1); // Increment turn count
+    setTurnCount((prev) => prev + 1); 
   };
 
   const makeOpponentMove = () => {
@@ -111,11 +111,14 @@ export default function GamePage() {
 
   useEffect(() => {
     if (opponentFingers.left === 0 && opponentFingers.right === 0) {
+      // Set game state to win
       setGameState("win");
     } else if (yourFingers.left === 0 && yourFingers.right === 0) {
+      // Set game state to lose
       setGameState("lose");
     } else if (turnCount >= TURN_LIMIT) {
-      setGameState("tie"); // Set game state to tie
+      // Set game state to tie
+      setGameState("tie"); 
     }
   }, [opponentFingers, yourFingers, turnCount]);
 
@@ -189,8 +192,8 @@ export default function GamePage() {
           </HandsContainer>
         </>
       )}
-      {gameState === "win" && <YouWin onPlayAgain={resetGame} />}
-      {gameState === "lose" && <YouLose onPlayAgain={resetGame} />}
+      {gameState === "win" && <YouWin onPlayAgain={resetGame} />}{/* Win condition */}
+      {gameState === "lose" && <YouLose onPlayAgain={resetGame} />}{/* lose condition */}
       {gameState === "tie" && <YouTie onPlayAgain={resetGame} />} {/* Tie condition */}
     </GameContainer>
   );
