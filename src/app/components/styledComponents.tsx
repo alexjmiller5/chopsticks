@@ -147,17 +147,23 @@ export const ExplanationButton = styled.button`
   font-size: 1.2rem;
   margin-left: 2vw;
   padding: 1vh 2vw;
-  background: linear-gradient(to right, #007bff, #0056b3);
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd);
+  background-size: 400% 400%;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
   transition: background 0.3s ease, transform 0.2s ease;
+
   &:hover {
-    background: linear-gradient(to right, #0056b3, #003c75);
-    transform: scale(1.05);
+    background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #ff9a9e, #fbc2eb);
+    transform: scale(1.05); /* Slight scaling effect */
+    filter: brightness(1.1);
   }
 `;
+
 
 // Explanation Text
 export const ExplanationText = styled.p`
