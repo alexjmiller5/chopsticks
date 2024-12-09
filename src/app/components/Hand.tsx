@@ -1,19 +1,42 @@
-// this is just a dummy hand component created for testing other components; will be replaced later with the actual one
-export default function Hand({ player, hand, onClick }: { player: string; hand: string; onClick: () => void }) {
-    return (
-      <button
-        onClick={onClick}
-        style={{
-          width: "100px",
-          height: "100px",
-          margin: "10px",
-          backgroundColor: player === "you" ? "lightblue" : "lightcoral",
-          border: "1px solid black",
-          borderRadius: "8px",
-        }}
-      >
-        {player} - {hand}
-      </button>
-    );
+import Image from 'next/image';
+import { HandButtonStyled, HandImageContainer } from './styledComponents';
+
+export default function Hand({ 
+  player, 
+  hand, 
+  onClick, 
+  currentHand,
+  fingers 
+}: { 
+  player: string; 
+  hand: string; 
+  onClick: () => void;
+  currentHand: string;
+  fingers: number;
+}) {
+  const isCurrentHand = player === "you" && hand === currentHand;
+  const direction = player === "you" ? "up" : "down";
+  const isDeadHand = fingers === 0;
+
+  if (isCurrentHand && !isDeadHand) {
+    return null;
   }
-  
+
+  return (
+    <HandButtonStyled 
+      onClick={onClick}
+      style={{ cursor: isDeadHand ? 'not-allowed' : 'inherit' }}
+    >
+      <HandImageContainer>
+        <Image
+          src={`/hands/${hand}-${direction}-${fingers}.png`}
+          alt={`${player}'s ${hand} hand with ${fingers} fingers`}
+          fill
+          style={{ objectFit: "contain" }}
+          priority
+        />
+      </HandImageContainer>
+    </HandButtonStyled>
+  );
+}
+

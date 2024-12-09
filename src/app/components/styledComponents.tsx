@@ -1,35 +1,47 @@
 import styled from "styled-components";
 
-// Styling for the individual hand button
-export const HandButton = styled.button<{ isPlayer: boolean }>`
-  width: 100px;
-  height: 100px;
-  margin: 10px;
-  background-color: ${(props) => (props.isPlayer ? "lightblue" : "lightcoral")};
-  border: 1px solid black;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) =>
-      props.isPlayer ? "#a0d8ef" : "#f88379"};
-  }
+export const HandButtonStyled = styled.button`
+  width: 20vw;
+  height: 10vh;
+  margin: 2vw;
+  background-color: transparent;
+  cursor: inherit;
+  border: none;
+  padding: 0;
+  position: relative;
 `;
 
-// Styling for the entire game container
-export const GameContainer = styled.div`
+export const HandImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+export const GameContainer = styled.div<CursorContainerProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  cursor: ${props => {
+    const fingers = props.$yourFingers[props.$currentHand as 'left' | 'right'];
+    return `url('/hands/${props.$currentHand}-up-${fingers}.png') 50 50, auto`;
+  }};
 `;
 
-// Styling for the hands container
+interface CursorContainerProps {
+  $currentHand: string;
+  $yourFingers: { left: number; right: number };
+}
+
 export const HandsContainer = styled.div`
   display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 `;
 
 // Popup styling for win/lose screens
@@ -43,12 +55,12 @@ export const Popup = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 300px;
-  height: 200px;
+  width: 80vw;
+  height: 40vh;
   background-color: white;
   border: 3px solid black;
   border-radius: 10px;
-  padding: 20px;
+  padding: 4vh;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
@@ -57,54 +69,55 @@ export const PopupContainer = styled.div`
   text-align: center;
   background-color: white;
   border: 1px solid #ccc;
-  padding: 20px;
-  margin: 20px auto;
-  width: 300px;
+  padding: 4vh;
+  margin: 4vh auto;
+  width: 80vw;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 
 export const PopupHeader = styled.h1`
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 2rem;
+  margin-bottom: 2vh;
 `;
 
 export const PopupParagraph = styled.p`
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 4vh;
 `;
 
 export const PopupButton = styled.button`
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 2vh 3vw;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1.2rem;
 
   &:hover {
     background-color: #0056b3;
   }
 `;
 export const GameTitle = styled.h1`
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: bold;
   color: #333;
+  margin: 2vh
 `;
 
 export const GameDescription = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #666;
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
 `;
 
 
 export const ExplanationButton = styled.button`
-  font-size: 1rem;
-  margin-left: 10px;
-  padding: 5px 10px;
+  font-size: 1.2rem;
+  margin-left: 2vw;
+  padding: 1vh 2vw;
   background-color: #007bff;
   color: white;
   border: none;
@@ -117,9 +130,9 @@ export const ExplanationButton = styled.button`
 `;
 
 export const ExplanationText = styled.p`
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #444;
-  margin-top: 10px;
+  margin-top: 2vh;
   text-align: center;
   max-width: 600px;
 `;
