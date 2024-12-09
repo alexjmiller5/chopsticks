@@ -17,56 +17,45 @@ Responsible: Shangwei Liu, Alex Miller
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from 'next/image';
-import YouWin from "./components/YouWin";
-import YouLose from "./components/YouLose";
-import YouTie from "./components/YouTie"; 
-import Hand from "./components/Hand";
-import {GameContainer, HandsContainer, GameTitle, GameDescription, ExplanationButton, ExplanationText} from "./components/styledComponents";
+import YouWin from "@/app/components/YouWin";
+import YouLose from "@/app/components/YouLose";
+import YouTie from "@/app/components/YouTie"; 
+import Hand from "@/app/components/Hand";
+import {GameContainer, HandsContainer, GameTitle, GameDescription, ExplanationButton, ExplanationText, TurnCounter} from "./components/styledComponents";
 import React from 'react';
 
-const CursorPreload = () => (
-  <div style={{ display: 'none' }}>
-    {[1, 2, 3, 4].map((fingers) => (
-      <React.Fragment key={fingers}>
-        <Image
-          src={`/hands/left-up-${fingers}.png`}
-          alt=""
-          width={50}
-          height={50}
-          priority
-        />
-        <Image
-          src={`/hands/right-up-${fingers}.png`}
-          alt=""
-          width={50}
-          height={50}
-          priority
-        />
-      </React.Fragment>
-    ))}
-  </div>
-);
-
 export default function GamePage() {
-  const [gameState, setGameState] = useState<"playing" | "win" | "lose" | "tie">(
-    "playing"
-  );
+  // The current state of the game can be "playing", "win", "lose", or "tie"
+  const [gameState, setGameState] = useState<"playing" | "win" | "lose" | "tie">("playing");
+
+  // Toggles the display of the "How to Play" explanation panel
   const [showExplanation, setShowExplanation] = useState(false);
+
+  // Tracks which of the player's hands is currently selected as the "attacking" hand
   const [currentHand, setCurrentHand] = useState<"left" | "right">("left");
+
+  // Indicates whether it is currently the player's turn
   const [isYourTurn, setIsYourTurn] = useState(true);
+
+  // Counts the total number of turns taken (both players combined)
   const [turnCount, setTurnCount] = useState(0);
+
+  // Limit of turns before the game ends in a tie
   const TURN_LIMIT = 30; 
 
+  // Opponent's fingers state for left and right hands
   const [opponentFingers, setOpponentFingers] = useState({
     left: 1,
     right: 1,
   });
+
+  // Player's fingers state for left and right hands
   const [yourFingers, setYourFingers] = useState({
     left: 1,
     right: 1,
   });
 
+  // Resets the entire game state to start anew
   const resetGame = () => {
     setGameState("playing");
     setIsYourTurn(true);
@@ -76,10 +65,13 @@ export default function GamePage() {
     setTurnCount(0); 
   };
 
+  // Toggles the visibility of the "How to Play" explanation text
   function toggleExplanation() {
     setShowExplanation((prev) => !prev);
   }
 
+  // Updates the fingers of a target hand based on the attacking fingers count,
+  // modulo 5 to determine if the hand becomes "dead" (0 fingers)
   const updateFingers = (
     targetPlayer: "opponent" | "you",
     targetHand: "left" | "right",
@@ -92,25 +84,27 @@ export default function GamePage() {
     }));
   };
 
+  // Handles the player's attack action when they click on an opponent's hand
   const handlePlayerAttack = (targetHand: "left" | "right") => {
-    if (!isYourTurn) return;
-    if (opponentFingers[targetHand] === 0) return;
+    if (!isYourTurn) return;              // Only allow attacks on player's turn
+    if (opponentFingers[targetHand] === 0) return; // Can't attack a dead hand
+
     const attackingFingers = yourFingers[currentHand];
     updateFingers("opponent", targetHand, attackingFingers);
-    setIsYourTurn(false);
-    setTurnCount((prev) => prev + 1); 
+    setIsYourTurn(false);   // End the player's turn
+    setTurnCount((prev) => prev + 1); // Increment turn counter
   };
 
+  // AI logic for the opponent's move:
+  // Randomly selects an attacking hand and a target hand from the available (non-dead) hands
   const makeOpponentMove = () => {
     const validAttackingHands = Object.entries(opponentFingers)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
     const attackingHand =
       validAttackingHands[Math.floor(Math.random() * validAttackingHands.length)];
 
     const validTargetHands = Object.entries(yourFingers)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
     const targetHand =
@@ -118,31 +112,36 @@ export default function GamePage() {
 
     const attackingFingers = opponentFingers[attackingHand];
     updateFingers("you", targetHand, attackingFingers);
-    setIsYourTurn(true);
-    setTurnCount((prev) => prev + 1); // Increment turn count
+    setIsYourTurn(true);   // Return turn to the player
+    setTurnCount((prev) => prev + 1); // Increment turn counter
   };
 
+  // When it's the opponent's turn (isYourTurn = false), initiate opponent's move after a short delay
   useEffect(() => {
     if (!isYourTurn && gameState === "playing") {
       const timer = setTimeout(makeOpponentMove, 2000);
       return () => clearTimeout(timer);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYourTurn, gameState]);
 
+  // Check for win/lose/tie conditions whenever hands or turn count change
   useEffect(() => {
+    // Player wins if opponent's both hands are dead (0 fingers)
     if (opponentFingers.left === 0 && opponentFingers.right === 0) {
-      // Set game state to win
       setGameState("win");
-    } else if (yourFingers.left === 0 && yourFingers.right === 0) {
-      // Set game state to lose
+    } 
+    // Player loses if their both hands are dead (0 fingers)
+    else if (yourFingers.left === 0 && yourFingers.right === 0) {
       setGameState("lose");
-    } else if (turnCount >= TURN_LIMIT) {
-      // Set game state to tie
+    } 
+    // If turn limit is reached without a winner, it's a tie
+    else if (turnCount >= TURN_LIMIT) {
       setGameState("tie"); 
     }
   }, [opponentFingers, yourFingers, turnCount]);
 
+  // If it's the player's turn and their current attacking hand is dead (0 fingers),
+  // automatically switch to the other hand if available
   useEffect(() => {
     if (isYourTurn && gameState === "playing") {
       if (yourFingers[currentHand] === 0) {
@@ -167,17 +166,20 @@ export default function GamePage() {
               {showExplanation ? "Hide Explanation" : "How to Play"}
             </ExplanationButton>
           </GameDescription>
-          <TurnCounter>Current Turn: {turnCount}</TurnCounter> {/* Display turn count */}
+          {/* Displays the current number of turns taken */}
+          <TurnCounter>Current Turn: {turnCount}</TurnCounter>
           {showExplanation && (
             <ExplanationText>
               Chopsticks is a simple game where players use their hands to attack their opponent&apos;s hands. Click on your hands to switch which hand you attack with and click opponent&apos;s hands to attack them. The first to get both opponent&apos;s hands to exactly 5 fingers wins! If no player wins within 30 moves, the game ends in a tie.
             </ExplanationText>
           )}
+          {/* Main hands display: top is opponent's hands, bottom is player's hands */}
           <HandsContainer
             $currentHand={currentHand}
             $yourFingers={yourFingers}
           >
             <div>
+              {/* Opponent's right hand: Clicking it attacks if it's your turn */}
               <Hand
                 player="opponent"
                 hand="right"
@@ -185,6 +187,7 @@ export default function GamePage() {
                 currentHand={currentHand}
                 fingers={opponentFingers.right}
               />
+              {/* Opponent's left hand: Clicking it attacks if it's your turn */}
               <Hand
                 player="opponent"
                 hand="left"
@@ -194,6 +197,7 @@ export default function GamePage() {
               />
             </div>
             <div>
+              {/* Player's left hand: Clicking switches your active attacking hand if it's not dead */}
               <Hand
                 player="you"
                 hand="left"
@@ -203,6 +207,7 @@ export default function GamePage() {
                 currentHand={currentHand}
                 fingers={yourFingers.left}
               />
+              {/* Player's right hand: Clicking switches your active attacking hand if it's not dead */}
               <Hand
                 player="you"
                 hand="right"

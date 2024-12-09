@@ -181,6 +181,3 @@ export const TurnCounter = styled.div`
   text-align: center;
   color: #333;
 `;
-
-
-
