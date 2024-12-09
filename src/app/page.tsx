@@ -1,4 +1,3 @@
-"use client";
 /*
 File: page.tsx
 Description: This is the main page of the Chopsticks game. It manages the game state, player moves, and game logic,
@@ -14,6 +13,8 @@ Features:
 
 Responsible: Shangwei Liu, Alex Miller
 */
+
+"use client";
 
 import { useState, useEffect } from "react";
 import YouWin from "./components/YouWin";

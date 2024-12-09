@@ -1,3 +1,10 @@
+/*
+  File: layout.tsx
+  Description: Simply contains the layout with only the children elements for optional extension to multiple pages in the future
+
+  Responsible: Alex Miller
+*/
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
