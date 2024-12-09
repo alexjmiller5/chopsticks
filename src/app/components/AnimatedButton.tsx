@@ -1,7 +1,7 @@
 /*
   File: AnimatedButton.tsx
   Description: A reusable animated button component with a rotating gradient animation effect.
-               This button is styled using MUI's Button component and @emotion/styled for custom animations.
+               Ensures consistent font styles with other UI buttons.
 
   Responsible: Shangwei Liu
 */
@@ -10,8 +10,7 @@ import { Button } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 
-// Define a rotating gradient animation using @emotion's keyframes.
-// The animation creates a rotating gradient effect on the button's background.
+// Define a rotating gradient animation using @emotion's keyframes
 const rotateGradient = keyframes`
   0% {
     background-position: 0% 50%;
@@ -24,50 +23,50 @@ const rotateGradient = keyframes`
   }
 `;
 
-// Styled MUI Button with the new gradient animation applied
+// Styled MUI Button with consistent font and animation
 const AnimatedButtonStyle = styled(Button)`
-  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd); /* Gradient colors */
-  background-size: 400% 400%;          /* Expand background size for gradient animation */
-  animation: ${rotateGradient} 3s infinite; /* Apply the gradient rotation animation */
-  margin-top: 20px;                    /* Add spacing on top for alignment */
-  color: white;                        /* White text color for contrast */
-  font-weight: bold;                   /* Make the button text bold */
-  border: none;                        /* Remove default button border */
-  border-radius: 8px;                  /* Add rounded corners */
-  padding: 12px 24px;                  /* Adjust padding for a larger button */
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd);
+  background-size: 400% 400%;
+  animation: ${rotateGradient} 3s infinite;
+
+  margin-top: 20px;
+  color: white;
+  font-size: 1.2rem;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  text-transform: none;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
 
   &:hover {
-    background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #ff9a9e, #fbc2eb); /* Slightly different gradient on hover */
-    filter: brightness(1.2);           /* Brighten the button slightly on hover */
-    cursor: pointer;                   /* Change cursor to pointer on hover */
+    background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #ff9a9e, #fbc2eb);
+    filter: brightness(1.2);
+    cursor: pointer;
   }
 `;
 
 /*
   Component: AnimatedButton
-  Purpose: Renders a button with a rotating gradient animation effect.
-           It is reusable and accepts two props: a click handler and a button label.
+  Purpose: Renders a button with a rotating gradient animation effect while maintaining consistent fonts.
 
   Props:
     - onClick: Function to handle button clicks.
     - label: Text to be displayed on the button.
-
-  Returns:
-    A styled and animated MUI Button component with a gradient animation.
 */
 export default function AnimatedButton({
   onClick,
   label,
 }: {
-  onClick: () => void; // Function to handle the button click event
-  label: string;       // Text displayed on the button
+  onClick: () => void;
+  label: string;
 }) {
   return (
     <AnimatedButtonStyle
-      variant="contained" /* Use MUI's contained style for button behavior */
-      onClick={onClick}   /* Attach the onClick event handler */
+      variant="contained"
+      onClick={onClick}
     >
-      {label}             {/* Render the text passed as the label */}
+      {label}
     </AnimatedButtonStyle>
   );
 }

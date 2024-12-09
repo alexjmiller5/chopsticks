@@ -149,7 +149,7 @@ export default function GamePage() {
           <TurnCounter>Current Turn: {turnCount}</TurnCounter> {/* Display turn count */}
           {showExplanation && (
             <ExplanationText>
-              Chopsticks is a simple game where players use their hands to attack their opponent&apos;s hands. Click on your hands to switch which hand you attack with and click opponent&apos;s hands to attack them. The first to get both opponent&apos;s hands to exactly 5 fingers wins!
+              Chopsticks is a simple game where players use their hands to attack their opponent&apos;s hands. Click on your hands to switch which hand you attack with and click opponent&apos;s hands to attack them. The first to get both opponent&apos;s hands to exactly 5 fingers wins! If no player wins within 30 moves, the game ends in a tie.
             </ExplanationText>
           )}
           <HandsContainer>

@@ -58,7 +58,7 @@ export const HandsContainer = styled.div`
   gap: 2vh;
 `;
 
-// Popup (Win/Lose Screen)
+// Popup (Win/Lose/Tie Screen)
 export const Popup = styled.div`
   position: fixed;
   top: 0;
@@ -107,24 +107,22 @@ export const PopupParagraph = styled.p`
 
 // Popup Button
 export const PopupButton = styled.button`
-  background: linear-gradient(to right, #007bff, #0056b3);
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 1.5vh 3vw;
-  border-radius: 6px;
+  padding: 2vh 3vw;
+  border-radius: 4px;
   cursor: pointer;
+
   font-size: 1.2rem;
-  transition: background 0.3s ease, transform 0.2s ease;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
 
   &:hover {
-    background: linear-gradient(to right, #0056b3, #003c75);
-    transform: scale(1.05);
-  }
-
-  &:active {
-    transform: scale(0.98);
+    background-color: #0056b3;
   }
 `;
+
 
 // Game Title
 export const GameTitle = styled.h1`
