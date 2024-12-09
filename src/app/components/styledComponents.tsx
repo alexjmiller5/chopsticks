@@ -171,5 +171,14 @@ export const ExplanationText = styled.p`
   line-height: 1.6;
 `;
 
+// Display the current turn
+export const TurnCounter = styled.div`
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+`;
+
 
 

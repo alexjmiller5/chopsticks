@@ -2,14 +2,15 @@
 /*
 File: page.tsx
 Description: This is the main page of the Chopsticks game. It manages the game state, player moves, and game logic,
-including win/lose conditions, AI opponent behavior, and dynamic UI updates.
+including win/lose/tie conditions, AI opponent behavior, and dynamic UI updates.
 
 Features:
 - Manages player and opponent hands with finger counts.
 - Handles turn-based gameplay.
 - Updates UI dynamically based on game state.
 - Includes a "How to Play" explanation.
-- Displays "You Win" and "You Lose" screens when the game ends.
+- Displays "You Win," "You Lose," and "It's a Tie" screens when the game ends.
+- Displays the current turn count during gameplay.
 
 Responsible: Shangwei Liu, Alex Miller
 */
@@ -17,16 +18,27 @@ Responsible: Shangwei Liu, Alex Miller
 import { useState, useEffect } from "react";
 import YouWin from "./components/YouWin";
 import YouLose from "./components/YouLose";
+import YouTie from "./components/YouTie"; // New component for tie screen
 import Hand from "./components/Hand";
-import {GameContainer, HandsContainer, GameTitle, GameDescription, ExplanationButton, ExplanationText} from "./components/styledComponents";
+import {
+  GameContainer,
+  HandsContainer,
+  GameTitle,
+  GameDescription,
+  ExplanationButton,
+  ExplanationText,
+  TurnCounter, // New styled component for turn display
+} from "./components/styledComponents";
 
 export default function GamePage() {
-  const [gameState, setGameState] = useState<"playing" | "win" | "lose">(
+  const [gameState, setGameState] = useState<"playing" | "win" | "lose" | "tie">(
     "playing"
   );
   const [showExplanation, setShowExplanation] = useState(false);
   const [currentHand, setCurrentHand] = useState<"left" | "right">("left");
   const [isYourTurn, setIsYourTurn] = useState(true);
+  const [turnCount, setTurnCount] = useState(0); // Track number of turns
+  const TURN_LIMIT = 30; // Define maximum number of turns for a tie
 
   const [opponentFingers, setOpponentFingers] = useState({
     left: 1,
@@ -43,17 +55,22 @@ export default function GamePage() {
     setCurrentHand("left");
     setOpponentFingers({ left: 1, right: 1 });
     setYourFingers({ left: 1, right: 1 });
+    setTurnCount(0); // Reset turn count
   };
 
   function toggleExplanation() {
     setShowExplanation((prev) => !prev);
   }
 
-  const updateFingers = (targetPlayer: "opponent" | "you", targetHand: "left" | "right", attackingFingers: number) => {
+  const updateFingers = (
+    targetPlayer: "opponent" | "you",
+    targetHand: "left" | "right",
+    attackingFingers: number
+  ) => {
     const setFingers = targetPlayer === "opponent" ? setOpponentFingers : setYourFingers;
-    setFingers(prev => ({
+    setFingers((prev) => ({
       ...prev,
-      [targetHand]: (prev[targetHand] + attackingFingers) % 5
+      [targetHand]: (prev[targetHand] + attackingFingers) % 5,
     }));
   };
 
@@ -63,27 +80,26 @@ export default function GamePage() {
     const attackingFingers = yourFingers[currentHand];
     updateFingers("opponent", targetHand, attackingFingers);
     setIsYourTurn(false);
+    setTurnCount((prev) => prev + 1); // Increment turn count
   };
 
   const makeOpponentMove = () => {
-    // Choose attacking hand that isn't dead
     const validAttackingHands = Object.entries(opponentFingers)
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
-    
-    const attackingHand = validAttackingHands[Math.floor(Math.random() * validAttackingHands.length)];
+    const attackingHand =
+      validAttackingHands[Math.floor(Math.random() * validAttackingHands.length)];
 
-    // Choose target hand that isn't dead
     const validTargetHands = Object.entries(yourFingers)
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
-    
-    const targetHand = validTargetHands[Math.floor(Math.random() * validTargetHands.length)];
+    const targetHand =
+      validTargetHands[Math.floor(Math.random() * validTargetHands.length)];
 
     const attackingFingers = opponentFingers[attackingHand];
-    
     updateFingers("you", targetHand, attackingFingers);
     setIsYourTurn(true);
+    setTurnCount((prev) => prev + 1); // Increment turn count
   };
 
   useEffect(() => {
@@ -98,15 +114,14 @@ export default function GamePage() {
       setGameState("win");
     } else if (yourFingers.left === 0 && yourFingers.right === 0) {
       setGameState("lose");
+    } else if (turnCount >= TURN_LIMIT) {
+      setGameState("tie"); // Set game state to tie
     }
-  }, [opponentFingers, yourFingers]);
+  }, [opponentFingers, yourFingers, turnCount]);
 
   useEffect(() => {
-    // Only check when it becomes your turn after opponent's move
     if (isYourTurn && gameState === "playing") {
-      // If current hand is dead
       if (yourFingers[currentHand] === 0) {
-        // Switch to other hand if it's alive
         const otherHand = currentHand === "left" ? "right" : "left";
         if (yourFingers[otherHand] !== 0) {
           setCurrentHand(otherHand);
@@ -116,22 +131,22 @@ export default function GamePage() {
   }, [isYourTurn, yourFingers, currentHand, gameState]);
 
   return (
-    <GameContainer
-    $currentHand={currentHand}
-    $yourFingers={yourFingers}
-    >
+    <GameContainer $currentHand={currentHand} $yourFingers={yourFingers}>
       {gameState === "playing" && (
         <>
           <GameTitle>Chopsticks Game</GameTitle>
           <GameDescription>
-            {isYourTurn ? "Your turn! Click on the hands to make your moves!" : "Opponent's turn... "}
+            {isYourTurn
+              ? "Your turn! Click on the hands to make your moves!"
+              : "Opponent's turn... "}
             <ExplanationButton onClick={toggleExplanation}>
               {showExplanation ? "Hide Explanation" : "How to Play"}
             </ExplanationButton>
           </GameDescription>
+          <TurnCounter>Current Turn: {turnCount}</TurnCounter> {/* Display turn count */}
           {showExplanation && (
             <ExplanationText>
-              Chopsticks is a simple game where players use their hands to attack their opponent&apos;s hands. Click on your hands to switch which hand you attack with and click opponent&apos;s hands to attack them. The first to get both opponent&apos;s hand to exactly 5 fingers wins!
+              Chopsticks is a simple game where players use their hands to attack their opponent&apos;s hands. Click on your hands to switch which hand you attack with and click opponent&apos;s hands to attack them. The first to get both opponent&apos;s hands to exactly 5 fingers wins!
             </ExplanationText>
           )}
           <HandsContainer>
@@ -155,14 +170,18 @@ export default function GamePage() {
               <Hand
                 player="you"
                 hand="left"
-                onClick={() => yourFingers.left !== 0 && setCurrentHand("left")}
+                onClick={() =>
+                  yourFingers.left !== 0 && setCurrentHand("left")
+                }
                 currentHand={currentHand}
                 fingers={yourFingers.left}
               />
               <Hand
                 player="you"
                 hand="right"
-                onClick={() => yourFingers.right !== 0 && setCurrentHand("right")}
+                onClick={() =>
+                  yourFingers.right !== 0 && setCurrentHand("right")
+                }
                 currentHand={currentHand}
                 fingers={yourFingers.right}
               />
@@ -172,7 +191,7 @@ export default function GamePage() {
       )}
       {gameState === "win" && <YouWin onPlayAgain={resetGame} />}
       {gameState === "lose" && <YouLose onPlayAgain={resetGame} />}
+      {gameState === "tie" && <YouTie onPlayAgain={resetGame} />} {/* Tie condition */}
     </GameContainer>
   );
 }
-
