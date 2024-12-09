@@ -1,4 +1,18 @@
 "use client";
+/*
+File: page.tsx
+Description: This is the main page of the Chopsticks game. It manages the game state, player moves, and game logic,
+including win/lose conditions, AI opponent behavior, and dynamic UI updates.
+
+Features:
+- Manages player and opponent hands with finger counts.
+- Handles turn-based gameplay.
+- Updates UI dynamically based on game state.
+- Includes a "How to Play" explanation.
+- Displays "You Win" and "You Lose" screens when the game ends.
+
+Responsible: Shangwei Liu, Alex Miller
+*/
 
 import { useState, useEffect } from "react";
 import YouWin from "./components/YouWin";
