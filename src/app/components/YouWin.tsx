@@ -7,16 +7,15 @@
   Responsible: Ruyue Xiao
 */
 
-import {PopupContainer, PopupHeader, PopupParagraph, PopupButton,} from "./styledComponents";
+import {Popup, PopupHeader, PopupParagraph, PopupButton,} from "./styledComponents";
 import AnimatedButton from "./AnimatedButton";
 
-  export default function YouWin(props: { onPlayAgain: () => void }) {
-    return (
-      <PopupContainer>
-        <PopupHeader>Congratulations, You Win!</PopupHeader>
-        <PopupParagraph>Great job!</PopupParagraph>
-        <AnimatedButton onClick={props.onPlayAgain} label="Play Again" />
-      </PopupContainer>
-    );
-  }
-  
+export default function YouWin(props: { onPlayAgain: () => void }) {
+  return (
+    <Popup>
+      <PopupHeader>Congratulations, You Win!</PopupHeader>
+      <PopupParagraph>Great job!</PopupParagraph>
+      <AnimatedButton onClick={props.onPlayAgain} label="Play Again" />
+    </Popup>
+  );
+}
