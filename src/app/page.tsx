@@ -99,12 +99,14 @@ export default function GamePage() {
   // Randomly selects an attacking hand and a target hand from the available (non-dead) hands
   const makeOpponentMove = () => {
     const validAttackingHands = Object.entries(opponentFingers)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
     const attackingHand =
       validAttackingHands[Math.floor(Math.random() * validAttackingHands.length)];
 
     const validTargetHands = Object.entries(yourFingers)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, fingers]) => fingers !== 0)
       .map(([hand]) => hand as "left" | "right");
     const targetHand =
@@ -122,6 +124,7 @@ export default function GamePage() {
       const timer = setTimeout(makeOpponentMove, 2000);
       return () => clearTimeout(timer);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isYourTurn, gameState]);
 
   // Check for win/lose/tie conditions whenever hands or turn count change
