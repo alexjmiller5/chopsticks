@@ -154,7 +154,7 @@ export default function GamePage() {
   }, [isYourTurn, yourFingers, currentHand, gameState]);
 
   return (
-    <GameContainer>
+    <GameContainer $currentHand={currentHand} $yourFingers={yourFingers}>
       {gameState === "playing" && (
         <>
           <GameTitle>Chopsticks Game</GameTitle>
@@ -174,10 +174,7 @@ export default function GamePage() {
             </ExplanationText>
           )}
           {/* Main hands display: top is opponent's hands, bottom is player's hands */}
-          <HandsContainer
-            $currentHand={currentHand}
-            $yourFingers={yourFingers}
-          >
+          <HandsContainer>
             <div>
               {/* Opponent's right hand: Clicking it attacks if it's your turn */}
               <Hand
