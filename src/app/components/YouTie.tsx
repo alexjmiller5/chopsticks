@@ -5,14 +5,14 @@
 
   Responsible: Ruyue Xiao
 */
-import {PopupContainer, PopupHeader, PopupParagraph, PopupButton,} from "./styledComponents";
+import {PopupContainer, PopupHeader, PopupParagraph} from "./styledComponents";
 import AnimatedButton from "./AnimatedButton";
 
 export default function YouTie(props: { onPlayAgain: () => void }) {
   return (
     <PopupContainer>
-      <PopupHeader>It's a Tie!</PopupHeader>
-      <PopupParagraph>Time's up! Neither player won within the turn limit.</PopupParagraph>
+      <PopupHeader>It&apos;s a Tie!</PopupHeader>
+      <PopupParagraph>Time&apos;s up! Neither player won within the turn limit.</PopupParagraph>
       <AnimatedButton onClick={props.onPlayAgain} label="Play Again" />
     </PopupContainer>
   );

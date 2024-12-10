@@ -9,16 +9,21 @@
 
 import styled from "styled-components";
 
+interface HandButtonProps {
+  $isDeadHand?: boolean;
+}
+
 // Hand Button
-export const HandButtonStyled = styled.button`
+export const HandButtonStyled = styled.button<HandButtonProps>`
   width: 20vw;
   height: 10vh;
   margin: 2vw;
   background-color: transparent;
-  /* cursor: inherit; */
   border: none;
   padding: 0;
   position: relative;
+  /* If the hand is dead, show not-allowed; otherwise rely on the parent's cursor */
+  cursor: ${props => (props.$isDeadHand ? 'not-allowed' : 'inherit')};
 `;
 
 // Hand Image Container
@@ -110,8 +115,6 @@ export const PopupButton = styled.button`
   border: none;
   padding: 2vh 3vw;
   border-radius: 4px;
-  cursor: pointer;
-
   font-size: 1.2rem;
   font-family: "Arial", sans-serif;
   font-weight: bold;
@@ -149,8 +152,6 @@ export const ExplanationButton = styled.button`
   background-size: 400% 400%;
   color: white;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
   font-family: "Arial", sans-serif;
   font-weight: bold;
   transition: background 0.3s ease, transform 0.2s ease;

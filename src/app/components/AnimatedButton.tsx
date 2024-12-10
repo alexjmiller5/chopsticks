@@ -42,7 +42,7 @@ const AnimatedButtonStyle = styled(Button)`
   &:hover {
     background: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #ff9a9e, #fbc2eb);
     filter: brightness(1.2);
-    cursor: pointer;
+    /* cursor: pointer; */
   }
 `;
 
@@ -70,4 +70,3 @@ export default function AnimatedButton({
     </AnimatedButtonStyle>
   );
 }
-

@@ -7,7 +7,7 @@
   Responsible: Ruyue Xiao
 */
 
-import {PopupContainer, PopupHeader, PopupParagraph, PopupButton,} from "./styledComponents";
+import {PopupContainer, PopupHeader, PopupParagraph} from "./styledComponents";
 import AnimatedButton from "./AnimatedButton";
 
   export default function YouWin(props: { onPlayAgain: () => void }) {

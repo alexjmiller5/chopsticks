@@ -34,7 +34,7 @@ export default function Hand({
   return (
     <HandButtonStyled 
       onClick={onClick}
-      style={{ cursor: isDeadHand ? 'not-allowed' : 'inherit' }}
+      $isDeadHand={isDeadHand}
     >
       <HandImageContainer>
         <Image
