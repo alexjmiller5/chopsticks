@@ -5,15 +5,15 @@
 
   Responsible: Ruyue Xiao
 */
-import {PopupContainer, PopupHeader, PopupParagraph} from "./styledComponents";
+import { Popup, PopupHeader, PopupParagraph } from "./styledComponents";
 import AnimatedButton from "./AnimatedButton";
 
 export default function YouLose(props: { onPlayAgain: () => void }) {
   return (
-    <PopupContainer>
+    <Popup>
       <PopupHeader>You Lose!</PopupHeader>
       <PopupParagraph>Better luck next time!</PopupParagraph>
       <AnimatedButton onClick={props.onPlayAgain} label="Play Again" />
-    </PopupContainer>
+    </Popup>
   );
 }

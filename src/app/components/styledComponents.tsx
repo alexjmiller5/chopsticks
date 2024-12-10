@@ -42,6 +42,7 @@ export const GameContainer = styled.div`
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  background-color: #FCF5E9;
 `;
 
 interface CursorContainerProps {
@@ -57,7 +58,7 @@ export const HandsContainer = styled.div<CursorContainerProps>`
   height: 100%;
   cursor: ${props => {
     const fingers = props.$yourFingers[props.$currentHand as 'left' | 'right'];
-    return `url('/hands/${props.$currentHand}-up-${fingers}.png') 50 50, auto`;
+    return `url('/hands/${props.$currentHand}-up-${fingers}.png'), 50 50 auto`;
   }};
 `;
 
@@ -70,28 +71,19 @@ export const Popup = styled.div`
   left: 0;
   margin: auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 80vw;
   height: 40vh;
-  background: linear-gradient(to bottom, #ffffff, #f0f0f0);
-  border: 3px solid #333;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd);
+  background-size: cover;
+  background-color: #FCF5E9;
+  border: 2px solid #f8e9f8;
+  border-radius: 12px;
   padding: 4vh;
   text-align: center;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-`;
-
-// Popup Container
-export const PopupContainer = styled.div`
-  text-align: center;
-  background: #fff;
-  border: 2px solid #ddd;
-  padding: 4vh;
-  margin: 4vh auto;
-  width: 80vw;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 `;
 
 // Popup Header
